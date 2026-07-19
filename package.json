@@ -1,0 +1,230 @@
+{
+  "name": "vscode-arb",
+  "displayName": "arb",
+  "description": "Language support for arb — the pipe-native TUI/web dashboard language (jq/xpath/css/yq superset on fusevm/JIT). Syntax highlighting (keywords, widgets, query verbs, input sources, regex + duration/size literals, widget paths, flags), filetype detection, LSP (arb --lsp), running, and full debugging (breakpoints, stepping, variables) via arb --dap.",
+  "version": "0.1.0",
+  "publisher": "MenkeTechnologies",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Debuggers"
+  ],
+  "keywords": [
+    "arb",
+    "arblang",
+    "pipeline",
+    "tui",
+    "lsp",
+    "debug"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MenkeTechnologies/vscode-arb.git"
+  },
+  "homepage": "https://menketechnologies.github.io/vscode-arb/",
+  "bugs": {
+    "url": "https://github.com/MenkeTechnologies/vscode-arb/issues"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onLanguage:arb",
+    "onDebugResolve:arb",
+    "onDebugDynamicConfigurations:arb"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "arb",
+        "aliases": [
+          "arb",
+          "Arb"
+        ],
+        "extensions": [
+          ".arb"
+        ],
+        "filenames": [],
+        "firstLine": "^#!.*\\barb\\b",
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "arb",
+        "scopeName": "source.arb",
+        "path": "./syntaxes/arb.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "arb",
+      "properties": {
+        "arb.path": {
+          "type": "string",
+          "default": "arb",
+          "description": "Path to the arb executable used for the language server, running, and debugging."
+        },
+        "arb.lsp.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Start the arb language server (arb --lsp). Disable to use syntax highlighting only."
+        },
+        "arb.lsp.args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "--lsp"
+          ],
+          "description": "Arguments passed to the arb executable to start the language server."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "arb.run",
+        "title": "Run File",
+        "category": "arb",
+        "icon": "$(play)"
+      },
+      {
+        "command": "arb.debug",
+        "title": "Debug File",
+        "category": "arb",
+        "icon": "$(debug-alt)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "arb.run",
+        "key": "ctrl+f5",
+        "mac": "ctrl+f5",
+        "when": "editorLangId == arb"
+      }
+    ],
+    "menus": {
+      "editor/title/run": [
+        {
+          "command": "arb.run",
+          "when": "resourceLangId == arb",
+          "group": "navigation@1"
+        },
+        {
+          "command": "arb.debug",
+          "when": "resourceLangId == arb",
+          "group": "navigation@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "arb.run",
+          "when": "editorLangId == arb"
+        },
+        {
+          "command": "arb.debug",
+          "when": "editorLangId == arb"
+        }
+      ]
+    },
+    "breakpoints": [
+      {
+        "language": "arb"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "arb",
+        "label": "arb",
+        "languages": [
+          "arb"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Absolute path to the .arb spec to debug.",
+                "default": "${file}"
+              },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Command-line arguments passed to arb (preset flags, etc.).",
+                "default": []
+              },
+              "cwd": {
+                "type": "string",
+                "description": "Working directory for the debugged program.",
+                "default": "${workspaceFolder}"
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "description": "Break on the first line of the program.",
+                "default": false
+              },
+              "noDebug": {
+                "type": "boolean",
+                "description": "Run without the debugger (ignore breakpoints).",
+                "default": false
+              },
+              "interpreterArgs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Extra arguments passed to the arb interpreter itself.",
+                "default": []
+              },
+              "arbPath": {
+                "type": "string",
+                "description": "Override the arb executable for this debug session. Defaults to the resolved \"arb.path\"."
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "arb",
+            "request": "launch",
+            "name": "arb: Debug Current File",
+            "program": "${file}",
+            "cwd": "${workspaceFolder}",
+            "stopOnEntry": false
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "arb: Debug Current File",
+            "description": "Debug the active .arb file with arb --dap",
+            "body": {
+              "type": "arb",
+              "request": "launch",
+              "name": "arb: Debug Current File",
+              "program": "^\"\\${file}\"",
+              "cwd": "^\"\\${workspaceFolder}\"",
+              "stopOnEntry": false
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "echo no build step"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^3.2.1",
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.1.0"
+  }
+}

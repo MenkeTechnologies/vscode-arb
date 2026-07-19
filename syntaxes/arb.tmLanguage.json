@@ -1,0 +1,128 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "arb",
+  "scopeName": "source.arb",
+  "fileTypes": ["arb"],
+  "patterns": [
+    { "include": "#shebang" },
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#regex" },
+    { "include": "#numbers" },
+    { "include": "#constants" },
+    { "include": "#sources" },
+    { "include": "#function-def" },
+    { "include": "#keywords-control" },
+    { "include": "#storage" },
+    { "include": "#operator-words" },
+    { "include": "#directives" },
+    { "include": "#widgets" },
+    { "include": "#query-verbs" },
+    { "include": "#actions" },
+    { "include": "#widget-path" },
+    { "include": "#flags" },
+    { "include": "#operators" }
+  ],
+  "repository": {
+    "shebang": {
+      "match": "\\A#!.*$",
+      "name": "comment.line.shebang.arb"
+    },
+    "comments": {
+      "match": "#.*$",
+      "name": "comment.line.number-sign.arb"
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.arb",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [ { "match": "\\\\.", "name": "constant.character.escape.arb" } ]
+        },
+        {
+          "name": "string.quoted.single.arb",
+          "begin": "'",
+          "end": "'",
+          "patterns": [ { "match": "\\\\.", "name": "constant.character.escape.arb" } ]
+        }
+      ]
+    },
+    "regex": {
+      "match": "/(?:\\\\.|\\[[^\\]\\n]*\\]|[^/\\n\\\\])+/[a-z]*",
+      "name": "string.regexp.arb"
+    },
+    "numbers": {
+      "patterns": [
+        { "name": "constant.numeric.duration.arb", "match": "\\b\\d+(?:\\.\\d+)?(?:ms|s|m|h)\\b" },
+        { "name": "constant.numeric.size.arb", "match": "\\b\\d+(?:\\.\\d+)?(?:kb|mb|gb|tb)\\b" },
+        { "name": "constant.numeric.hex.arb", "match": "\\b0[xX][0-9A-Fa-f]+\\b" },
+        { "name": "constant.numeric.arb", "match": "\\b\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?\\b" },
+        { "name": "constant.numeric.arb", "match": "(?<![\\w.])\\.\\d+(?:[eE][-+]?\\d+)?\\b" }
+      ]
+    },
+    "constants": {
+      "match": "\\b(true|false|nil)\\b",
+      "name": "constant.language.arb"
+    },
+    "sources": {
+      "match": "\\bin\\.(json|csv|tsv|xml|html|yaml|yml|toml|logfmt)\\b",
+      "name": "support.constant.source.arb"
+    },
+    "function-def": {
+      "match": "\\b(fn)\\s+([A-Za-z_]\\w*)",
+      "captures": {
+        "1": { "name": "storage.type.function.arb" },
+        "2": { "name": "entity.name.function.arb" }
+      }
+    },
+    "keywords-control": {
+      "match": "\\b(if|elif|else|for|while|match|case|when|return|break|continue|do)\\b",
+      "name": "keyword.control.arb"
+    },
+    "storage": {
+      "match": "\\b(fn|var|let|import|save|as)\\b",
+      "name": "storage.type.arb"
+    },
+    "operator-words": {
+      "match": "\\b(and|or|not|in|matches|every|spawn|send)\\b",
+      "name": "keyword.operator.word.arb"
+    },
+    "directives": {
+      "match": "\\b(source|bind|configure|grid|search|timeout|expect|out)\\b",
+      "name": "keyword.other.directive.arb"
+    },
+    "widgets": {
+      "match": "\\b(tail|table|list|gauge|spark|bars|histo|chart|select|input|tabs|block|frame|slider|check|facet|filter|text)\\b",
+      "name": "support.class.widget.arb"
+    },
+    "query-verbs": {
+      "match": "\\b(field|fields|find|attr|where|reject|pick|keys|vals|map|each|count|sum|min|max|avg|tally|sort_by|sort|group_by|unique_by|uniq|count_by|min_by|max_by|has|entries|flatten|add|over|under|between|enumerate|words|dedup|distinct|tailn|take|drop|first|last|nth|slice|lpad|pad|flip|b64d|b64|hex|unhex|urlenc|urldec|extract|split|substr|chars|title|repeat|replace|set|del|rename|default|merge|floor|ceil|clamp|abs|round|commafy|bytes|duration|delta|cumsum|rate|sma|ewma|median|stddev|percentile|p50|p90|p95|p99|range|product|bins|apply|basename|dirname|cut|calc|wc|numeric|nonempty|ends|starts|append|prepend|rev|sample|index|join|contains|lower|upper|trim|len|grepf|grepv|grep)\\b",
+      "name": "support.function.arb"
+    },
+    "actions": {
+      "match": "\\b(alert|beep|exec|flash|quit)\\b",
+      "name": "support.function.action.arb"
+    },
+    "widget-path": {
+      "match": "\\.[A-Za-z_][A-Za-z0-9_.]*",
+      "name": "variable.other.widget-path.arb"
+    },
+    "flags": {
+      "match": "(?<=\\s)-[a-z][a-z-]*\\b",
+      "name": "variable.parameter.flag.arb"
+    },
+    "operators": {
+      "patterns": [
+        { "name": "keyword.operator.pipe.arb", "match": "\\|>" },
+        { "name": "keyword.operator.bind.arb", "match": "<-" },
+        { "name": "keyword.operator.lambda.arb", "match": "=>" },
+        { "name": "keyword.operator.range.arb", "match": "\\.\\." },
+        { "name": "keyword.operator.assignment.arb", "match": "(\\+=|-=|\\*=|/=|%=|=)" },
+        { "name": "keyword.operator.comparison.arb", "match": "(==|!=|<=|>=|<|>)" },
+        { "name": "keyword.operator.arithmetic.arb", "match": "(\\+|-|\\*|/|%)" },
+        { "name": "keyword.operator.pipe.arb", "match": "\\|" }
+      ]
+    }
+  }
+}
