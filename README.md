@@ -34,7 +34,7 @@ Tcl/Tk-flavored spec. arb is a `jq`/`xpath`/`css`/`yq` superset that runs on the
 The `arb` binary must be on `PATH`, or set `arb.path` to its absolute location:
 
 ```sh
-brew install menketechnologies/menketech/arblang
+brew install menketechnologies/menketech/arb
 ```
 
 ## Extension Settings
